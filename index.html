@@ -97,6 +97,7 @@
             <button id="tab-btn-academy" class="tab-btn pb-3 whitespace-nowrap hover:text-[#a3a3a3] transition-colors" onclick="switchTab('academy')">The Academy</button>
         </div>
 
+        <!-- TAB 1: DASHBOARD -->
         <div id="tab-dashboard" class="tab-content active space-y-12">
             <div class="bg-subtle border border-subtle p-8 md:p-12 rounded-sm relative overflow-hidden">
                 <div class="absolute top-0 right-0 w-64 h-64 bg-[#4CAF50] opacity-5 blur-[100px]"></div>
@@ -162,6 +163,7 @@
             
         </div>
 
+        <!-- TAB 2: CALIBRATION MANUAL -->
         <div id="tab-calibration" class="tab-content space-y-8">
             <div class="mb-4">
                 <span class="protocol-id text-xs text-[#3b82f6] tracking-[0.2em] uppercase block mb-1">Standardized Metrics</span>
@@ -301,51 +303,50 @@
                     </div>
                 </div>
 
-                
                 <div class="bg-subtle border border-subtle rounded-sm">
-<button class="w-full text-left p-5 flex items-center justify-between focus:outline-none hover:bg-[#1a1a1a] transition-colors" onclick="toggleFlipboard(this)">
-<div>
-<p class="protocol-id text-[10px] text-[#3b82f6] tracking-[0.2em] uppercase mb-1">GATE 04</p>
-<h3 class="text-xl font-serif text-white">
-<span data-lang-en>The Shield (Cervical & Scapular)</span>
-<span data-lang-zh>肩颈护盾</span>
-<span data-lang-ms>Pelindung Bahu & Leher</span>
-<span class="wolf-content text-accent italic text-base ml-2">Scapular Glide & Cervical Neutrality</span>
-</h3>
-</div>
-<svg class="w-5 h-5 text-accent transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 9l-7 7-7-7"></path></svg>
-</button>
-<div class="flipboard-content bg-[#0a0a0a] border-t border-subtle">
-<div class="shepherd-content p-6">
-<p class="text-[#e0e0e0] font-medium mb-4" data-lang-en>Rule: Shoulders wide and down. The master switch for the neck is the Eye Gaze.</p>
-<p class="text-[#e0e0e0] font-medium mb-4" data-lang-zh>守则：双肩向下沉并向两侧展宽。颈椎的安全开关在于“视线控制”。</p>
-<p class="text-[#e0e0e0] font-medium mb-4" data-lang-ms>Peraturan: Bahu ditarik ke bawah dan melebar. Suis utama untuk leher adalah Arah Pandangan (Eye Gaze).</p>
-<ul class="space-y-2 text-sm text-[#a3a3a3] list-disc list-inside">
-<li data-lang-en>Dictate exactly where the client's eyes should look. Where the eyes go, the spine follows.</li>
-<li data-lang-en>If eyes drop to the floor during a transition, the cervical spine drops, and the gate fails.</li>
-<li data-lang-zh>明确指示客户眼睛应该看向哪里。视线看向何处，脊柱就跟随到何处。</li>
-<li data-lang-zh>如果转换动作时视线掉向地板，颈椎就会塌陷，关卡即告失败。</li>
-<li data-lang-ms>Arahkan dengan tepat ke mana pelanggan patut memandang. Ke mana mata pergi, tulang belakang akan mengikut.</li>
-<li data-lang-ms>Jika mata tunduk ke lantai semasa transisi, tulang leher akan jatuh, dan kawalan gagal.</li>
-</ul>
-</div>
-<div class="wolf-content p-6 grid grid-cols-1 md:grid-cols-2 gap-8">
-<div>
-<h4 class="protocol-id text-xs text-white mb-3 tracking-widest uppercase">Target Elements</h4>
-<ul class="space-y-2 text-sm text-[#a3a3a3]">
-<li class="flex gap-2"><span class="text-[#4CAF50]">*</span> Serratus anterior and lower trapezius dominance.</li>
-<li class="flex gap-2"><span class="text-[#4CAF50]">*</span> Deep cervical flexor activation via occulo-motor reflex.</li>
-</ul>
-</div>
-<div>
-<h4 class="protocol-id text-xs text-white mb-3 tracking-widest uppercase">Milestones & Failures</h4>
-<ul class="space-y-2 text-sm text-[#a3a3a3]">
-<li class="flex gap-2"><span class="text-[#3b82f6]">→</span> <strong class="text-white">Fail:</strong> Cervical spine compression due to upper trapezius hyper-activation and dropped eye gaze.</li>
-</ul>
-</div>
-</div>
-</div>
-</div>
+                    <button class="w-full text-left p-5 flex items-center justify-between focus:outline-none hover:bg-[#1a1a1a] transition-colors" onclick="toggleFlipboard(this)">
+                        <div>
+                            <p class="protocol-id text-[10px] text-[#3b82f6] tracking-[0.2em] uppercase mb-1">GATE 04</p>
+                            <h3 class="text-xl font-serif text-white">
+                                <span data-lang-en>The Shield (Cervical & Scapular)</span>
+                                <span data-lang-zh>肩颈护盾</span>
+                                <span data-lang-ms>Pelindung Bahu & Leher</span>
+                                <span class="wolf-content text-accent italic text-base ml-2">Scapular Glide & Cervical Neutrality</span>
+                            </h3>
+                        </div>
+                        <svg class="w-5 h-5 text-accent transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="flipboard-content bg-[#0a0a0a] border-t border-subtle">
+                        <div class="shepherd-content p-6">
+                            <p class="text-[#e0e0e0] font-medium mb-4" data-lang-en>Rule: Shoulders wide and down. The master switch for the neck is the Eye Gaze.</p>
+                            <p class="text-[#e0e0e0] font-medium mb-4" data-lang-zh>守则：双肩向下沉并向两侧展宽。颈椎的安全开关在于“视线控制”。</p>
+                            <p class="text-[#e0e0e0] font-medium mb-4" data-lang-ms>Peraturan: Bahu ditarik ke bawah dan melebar. Suis utama untuk leher adalah Arah Pandangan (Eye Gaze).</p>
+                            <ul class="space-y-2 text-sm text-[#a3a3a3] list-disc list-inside">
+                                <li data-lang-en>Dictate exactly where the client's eyes should look. Where the eyes go, the spine follows.</li>
+                                <li data-lang-en>If eyes drop to the floor during a transition, the cervical spine drops, and the gate fails.</li>
+                                <li data-lang-zh>明确指示客户眼睛应该看向哪里。视线看向何处，脊柱就跟随到何处。</li>
+                                <li data-lang-zh>如果转换动作时视线掉向地板，颈椎就会塌陷，关卡即告失败。</li>
+                                <li data-lang-ms>Arahkan dengan tepat ke mana pelanggan patut memandang. Ke mana mata pergi, tulang belakang akan mengikut.</li>
+                                <li data-lang-ms>Jika mata tunduk ke lantai semasa transisi, tulang leher akan jatuh, dan kawalan gagal.</li>
+                            </ul>
+                        </div>
+                        <div class="wolf-content p-6 grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div>
+                                <h4 class="protocol-id text-xs text-white mb-3 tracking-widest uppercase">Target Elements</h4>
+                                <ul class="space-y-2 text-sm text-[#a3a3a3]">
+                                    <li class="flex gap-2"><span class="text-[#4CAF50]">*</span> Serratus anterior and lower trapezius dominance.</li>
+                                    <li class="flex gap-2"><span class="text-[#4CAF50]">*</span> Deep cervical flexor activation via occulo-motor reflex.</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="protocol-id text-xs text-white mb-3 tracking-widest uppercase">Milestones & Failures</h4>
+                                <ul class="space-y-2 text-sm text-[#a3a3a3]">
+                                    <li class="flex gap-2"><span class="text-[#3b82f6]">→</span> <strong class="text-white">Fail:</strong> Cervical spine compression due to upper trapezius hyper-activation and dropped eye gaze.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="bg-subtle border border-subtle rounded-sm">
                     <button class="w-full text-left p-5 flex items-center justify-between focus:outline-none hover:bg-[#1a1a1a] transition-colors" onclick="toggleFlipboard(this)">
                         <div>
@@ -435,6 +436,7 @@
             </div>
         </div>
 
+        <!-- TAB 3: CUEING ARMORY -->
         <div id="tab-armory" class="tab-content space-y-12">
             <div class="mb-4">
                 <span class="protocol-id text-xs text-[#4CAF50] tracking-[0.2em] uppercase block mb-1">Protocol: SYS-P049</span>
@@ -474,6 +476,7 @@
                     </table>
                 </div>
             </div>
+            
             <div class="border border-[#222] bg-[#0a0a0a] rounded-sm overflow-hidden">
                 <table class="w-full text-left border-collapse text-xs md:text-sm">
                     <thead>
@@ -559,8 +562,9 @@
                     </tbody>
                 </table>
             </div>
-         </div>
+        </div>
 
+        <!-- TAB 4: KIN-013 UNWIND SCRIPT -->
         <div id="tab-unwind" class="tab-content space-y-12">
             <div class="mb-8 border-b border-[#222] pb-6">
                 <span class="protocol-id text-xs text-[#3b82f6] tracking-[0.2em] uppercase block mb-1">Execution Script: KIN-013</span>
@@ -574,6 +578,7 @@
 
             <div class="space-y-4">
 
+                <!-- Move 1: The Barber Pole -->
                 <div class="p-6 bg-subtle border border-subtle rounded-sm">
                     <div class="flex items-start gap-4 mb-4">
                         <span class="protocol-id text-[#4CAF50] text-xs font-bold shrink-0 mt-1">01</span>
@@ -593,6 +598,7 @@
                     </div>
                 </div>
 
+                <!-- Move 2: Climbing the Trunk -->
                 <div class="p-6 bg-subtle border border-subtle rounded-sm">
                     <div class="flex items-start gap-4 mb-4">
                         <span class="protocol-id text-[#4CAF50] text-xs font-bold shrink-0 mt-1">02</span>
@@ -612,6 +618,7 @@
                     </div>
                 </div>
 
+                <!-- Move 3: The Arrowhead -->
                 <div class="p-6 bg-subtle border border-subtle rounded-sm">
                     <div class="flex items-start gap-4 mb-4">
                         <span class="protocol-id text-[#4CAF50] text-xs font-bold shrink-0 mt-1">03</span>
@@ -636,6 +643,7 @@
                     </div>
                 </div>
 
+                <!-- Move 4: Thread The Needle -->
                 <div class="p-6 bg-subtle border border-subtle rounded-sm">
                     <div class="flex items-start gap-4 mb-4">
                         <span class="protocol-id text-[#4CAF50] text-xs font-bold shrink-0 mt-1">04</span>
@@ -660,6 +668,7 @@
                     </div>
                 </div>
 
+                <!-- Move 5: The Windmill -->
                 <div class="p-6 bg-subtle border border-subtle rounded-sm">
                     <div class="flex items-start gap-4 mb-4">
                         <span class="protocol-id text-[#4CAF50] text-xs font-bold shrink-0 mt-1">05</span>
@@ -684,6 +693,7 @@
                     </div>
                 </div>
 
+                <!-- Move 6: Pearls Off The Mat -->
                 <div class="p-6 border border-[#3b82f6]/30 bg-[#050505] rounded-sm">
                     <div class="flex items-start gap-4 mb-4">
                         <span class="protocol-id text-[#3b82f6] text-xs font-bold shrink-0 mt-1">06</span>
@@ -712,94 +722,237 @@
             </div>
         </div>
 
-       <!-- TAB 4: THE ACADEMY (NOW INCLUDES PLAIN LANGUAGE TAXONOMY & FAQs) -->
-    <div id="tab-academy" class="tab-content space-y-12">
-        <div class="mb-8 border-b border-[#222] pb-6">
-            <span class="protocol-id text-xs text-[#888] tracking-[0.2em] uppercase block mb-1">System Documentation</span>
-            <h2 class="text-3xl font-serif text-white">The Academy & System FAQ</h2>
-            <p class="text-[#a3a3a3] mt-2 max-w-2xl leading-relaxed">Core system methodology, class taxonomy mapping, and situational protocols.</p>
-        </div>
+        <!-- TAB 5: THE ACADEMY -->
+        <div id="tab-academy" class="tab-content space-y-12">
+            <div class="mb-8 border-b border-[#222] pb-6">
+                <span class="protocol-id text-xs text-[#888] tracking-[0.2em] uppercase block mb-1">System Documentation</span>
+                <h2 class="text-3xl font-serif text-white">The Academy & System FAQ</h2>
+                <p class="text-[#a3a3a3] mt-2 max-w-2xl leading-relaxed">Core system methodology, class taxonomy mapping, and situational protocols.</p>
+            </div>
 
-        <div class="space-y-4">
-            <!-- Plain Language Taxonomy -->
-            <details class="group bg-[#111] border border-[#222] p-5 rounded-sm" open>
-                <summary class="cursor-pointer font-serif text-xl text-white flex justify-between items-center list-none">
-                    Client-Facing Class Explanations (Taxonomy)
-                    <svg class="w-4 h-4 transition group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 9l-7 7-7-7"></path></svg>
-                </summary>
-                <div class="mt-6 space-y-6">
-                    <div class="border-l-2 border-[#888] pl-4">
-                        <h4 class="text-white font-semibold text-md mb-1">1. Optimum Control (Level 1)</h4>
-                        <p class="text-sm text-[#a3a3a3] italic mb-2">"What is this class?"</p>
-                        <p class="text-sm text-[#e0e0e0]"><strong>Plain English:</strong> "This is our foundation. It's on the Mat, Chair, or basic Reformer. It’s about slowing down, finding your neutral pelvis, and connecting with your deep core. It's perfect if you're new, recovering, or want to perfect your form before adding heavy resistance."</p>
+            <div class="space-y-4">
+                <!-- Plain Language Taxonomy -->
+                <details class="group bg-[#111] border border-[#222] p-5 rounded-sm" open>
+                    <summary class="cursor-pointer font-serif text-xl text-white flex justify-between items-center list-none">
+                        Client-Facing Class Explanations (Taxonomy)
+                        <svg class="w-4 h-4 transition group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 9l-7 7-7-7"></path></svg>
+                    </summary>
+                    <div class="mt-6 space-y-6">
+                        <div class="border-l-2 border-[#888] pl-4">
+                            <h4 class="text-white font-semibold text-md mb-1">1. Optimum Control (Level 1)</h4>
+                            <p class="text-sm text-[#a3a3a3] italic mb-2">"What is this class?"</p>
+                            <p class="text-sm text-[#e0e0e0]"><strong>Plain English:</strong> "This is our foundation. It's on the Mat, Chair, or basic Reformer. It’s about slowing down, finding your neutral pelvis, and connecting with your deep core. It's perfect if you're new, recovering, or want to perfect your form before adding heavy resistance."</p>
+                        </div>
+                        <div class="border-l-2 border-[#3b82f6] pl-4">
+                            <h4 class="text-white font-semibold text-md mb-1">2. Optimum Capacity (Level 2)</h4>
+                            <p class="text-sm text-[#a3a3a3] italic mb-2">"What is this class?"</p>
+                            <p class="text-sm text-[#e0e0e0]"><strong>Plain English:</strong> "This is where we add athletic load. We use the Reformer's spring tension to build muscular endurance and functional strength. Expect to sweat and test your limits, but we keep the movements controlled and safe."</p>
+                        </div>
+                        <div class="border-l-2 border-[#ff9800] pl-4">
+                            <h4 class="text-white font-semibold text-md mb-1">3. Optimum Flow State (Level 3)</h4>
+                            <p class="text-sm text-[#a3a3a3] italic mb-2">"What is this class?"</p>
+                            <p class="text-sm text-[#e0e0e0]"><strong>Plain English:</strong> "This is kinetic harmony. We link complex movements together continuously with very few breaks. It's an advanced class focused on rhythm, efficiency, and total body integration."</p>
+                        </div>
                     </div>
-                    <div class="border-l-2 border-[#3b82f6] pl-4">
-                        <h4 class="text-white font-semibold text-md mb-1">2. Optimum Capacity (Level 2)</h4>
-                        <p class="text-sm text-[#a3a3a3] italic mb-2">"What is this class?"</p>
-                        <p class="text-sm text-[#e0e0e0]"><strong>Plain English:</strong> "This is where we add athletic load. We use the Reformer's spring tension to build muscular endurance and functional strength. Expect to sweat and test your limits, but we keep the movements controlled and safe."</p>
-                    </div>
-                    <div class="border-l-2 border-[#ff9800] pl-4">
-                        <h4 class="text-white font-semibold text-md mb-1">3. Optimum Flow State (Level 3)</h4>
-                        <p class="text-sm text-[#a3a3a3] italic mb-2">"What is this class?"</p>
-                        <p class="text-sm text-[#e0e0e0]"><strong>Plain English:</strong> "This is kinetic harmony. We link complex movements together continuously with very few breaks. It's an advanced class focused on rhythm, efficiency, and total body integration."</p>
-                    </div>
+                </details>
+
+                <details class="group bg-[#0a0a0a] border border-[#222] p-5 rounded-sm">
+                    <summary class="cursor-pointer font-medium text-white flex justify-between items-center list-none">
+                        <span data-lang-en>Why do we ban clinical jargon during live group classes?</span>
+                        <span data-lang-zh>为什么我们在团体课中严禁使用临床术语？</span>
+                        <span data-lang-ms>Mengapakah kami melarang istilah klinikal semasa kelas berkumpulan?</span>
+                        <span class="transition group-open:rotate-180 shrink-0 ml-4">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 9l-7 7-7-7"></path></svg>
+                        </span>
+                    </summary>
+                    <p class="mt-4 text-sm text-[#888] leading-relaxed">
+                        <span data-lang-en>To bypass intellectual overload. A client who is thinking about "which joint to flex" cannot find muscle connection. Using System 1 spatial metaphors ensures immediate, intuitive motor execution.</span>
+                        <span data-lang-zh>为了绕过大脑的过度思索。一个拼命去想"应该弯曲哪个关节"的客户是找不到肌肉连接的。使用直观的空间提示可以确保最直接、下意识地完成动作。</span>
+                        <span data-lang-ms>Untuk mengelakkan beban kognitif berlebihan. Pelanggan yang sibuk memikirkan "sendi mana yang patut dilenturkan" tidak akan dapat fokus pada sambungan otot. Isyarat visual memastikan pergerakan berlaku secara terus.</span>
+                    </p>
+                </details>
+
+                <details class="group bg-[#0a0a0a] border border-[#222] p-5 rounded-sm">
+                    <summary class="cursor-pointer font-medium text-white flex justify-between items-center list-none">
+                        <span data-lang-en>What is the "Skeleton vs. Skin" Protocol?</span>
+                        <span data-lang-zh>什么是"骨架与皮肤"协议？</span>
+                        <span data-lang-ms>Apakah Protokol "Skeleton vs. Skin"?</span>
+                        <span class="transition group-open:rotate-180 shrink-0 ml-4">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 9l-7 7-7-7"></path></svg>
+                        </span>
+                    </summary>
+                    <p class="mt-4 text-sm text-[#888] leading-relaxed">
+                        <span data-lang-en>The Skeleton is the rigid biomechanical baseline (the Kinetic Six safety gates) required for high-level quality control. The Skin is the creative overlay (music choice, verbal style, individual class variations) that remains unique to the instructor.</span>
+                        <span data-lang-zh>骨架 (Skeleton) 是用于高级质量控制的、不可动摇的生物力学底线（动能六大安全关卡）。皮肤 (Skin) 则是由教练自主掌握的创意叠加层（音乐、说话风格和动作编排的细微变化）。</span>
+                        <span data-lang-ms>Skeleton ialah garis panduan biomekanikal yang ketat (enam kawalan keselamatan kinetik) untuk kawalan kualiti tinggi. Skin pula adalah unsur kreativiti (pilihan muzik, gaya penyampaian, variasi pergerakan) yang dikawal sepenuhnya oleh tenaga pengajar.</span>
+                    </p>
+                </details>
+
+                <!-- FAQ: Privacy / Black Swan -->
+                <details class="group bg-[#0a0a0a] border border-[#222] p-5 rounded-sm">
+                    <summary class="cursor-pointer font-medium text-white flex justify-between items-center list-none">
+                        Protocol: Handling Privacy Complaints (The Glass Room)
+                        <svg class="w-4 h-4 transition group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 9l-7 7-7-7"></path></svg>
+                    </summary>
+                    <p class="mt-4 text-sm text-[#888] leading-relaxed">
+                        If a client expresses discomfort with the see-through glass panels, do not apologize or promise frosted glass. We operate in transparency.<br><br>
+                        <strong class="text-[#e0e0e0]">The Script:</strong> "I totally understand! We keep the glass clear because the work you are doing in here is the gold standard, and we want people to see it. But your comfort is priority one. I’m going to put you right here in Lane X—it's our stealth spot where you have total privacy from the window. You're safe with me."
+                    </p>
+                </details>
+
+                <!-- Protocol: The Black Swan -->
+                <details class="group bg-[#0a0a0a] border border-[#222] p-5 rounded-sm">
+                    <summary class="cursor-pointer font-medium text-white flex justify-between items-center list-none">
+                        <span data-lang-en>Protocol: The Black Swan (Floor Anomalies)</span>
+                        <span data-lang-zh>协议：黑天鹅事件（突发异常处理）</span>
+                        <span data-lang-ms>Protokol: The Black Swan (Anomali Lantai)</span>
+                        <span class="transition group-open:rotate-180 shrink-0 ml-4">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 9l-7 7-7-7"></path></svg>
+                        </span>
+                    </summary>
+                    <p class="mt-4 text-sm text-[#888] leading-relaxed">
+                        <span data-lang-en>No matter how rigid the Skeleton is, highly improbable variables will occur on the floor (equipment failure, acute client injury). In a Black Swan event, immediately pause the kinetic flow. Shift the entire room into the KIN-013 Unwind protocol to stabilize the environment. Do not improvise.</span>
+                        <span data-lang-zh>无论"骨架"多么严谨，地面上总会发生极小概率的突发变量（设备故障、客户急性受伤）。在遇到"黑天鹅"事件时，立即暂停动能流动。让整个教室进入 KIN-013 身心释压方案以稳定环境。绝不可临时编造动作。</span>
+                        <span data-lang-ms>Walaupun Skeleton sangat ketat, pembolehubah yang sangat tidak dijangka akan berlaku di atas lantai (kegagalan peralatan, kecederaan akut pelanggan). Dalam acara Black Swan, hentikan aliran kinetik serta-merta. Tukar seluruh kelas kepada protokol KIN-013 Unwind untuk menstabilkan persekitaran. Jangan reka pergerakan baru.</span>
+                    </p>
+                </details>
+
+                <!-- Systems Q&A: Product Omission -->
+                <details class="group bg-[#0a0a0a] border border-[#222] p-5 rounded-sm">
+                    <summary class="cursor-pointer font-medium text-white flex justify-between items-center list-none">
+                        <span data-lang-en>Systems Q&A: Client Alignment & Roster Management</span>
+                        <span data-lang-zh>系统问答：客户筛选与名单管理</span>
+                        <span data-lang-ms>Soal Jawab Sistem: Penjajaran Pelanggan & Pengurusan Senarai</span>
+                        <span class="transition group-open:rotate-180 shrink-0 ml-4">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 9l-7 7-7-7"></path></svg>
+                        </span>
+                    </summary>
+                    <p class="mt-4 text-sm text-[#888] leading-relaxed">
+                        <span data-lang-en>As a movement engineer, your time and our floor space are premium assets. We apply the Rational for Product Omission Mandate to regulate our ecosystem. If a client refuses to adhere to the biomechanical safety gates or disrupts the S-Rank standard of the room, we omit them from our roster.</span>
+                        <span data-lang-zh>作为一名运动工程师，您的时间与我们的场地是极其珍贵的资产。我们执行"产品合理遗漏指令"来规范我们的生态系统。如果客户拒绝遵守生物力学安全关卡，或破坏了教室的 S-Rank (S级) 卓越标准，我们将把他们从名单中剔除。</span>
+                        <span data-lang-ms>Sebagai jurutera pergerakan, masa anda dan ruang lantai kami adalah aset premium. Kami menggunakan Mandat Peninggalan Produk Rasional untuk mengawal selia ekosistem kami. Jika pelanggan enggan mematuhi pintu keselamatan biomekanikal atau mengganggu standard S-Rank kelas, kami akan mengeluarkan mereka dari senarai kami.</span>
+                    </p>
+                </details>
+
+                <!-- Architect-only advanced section -->
+                <div class="wolf-content mt-8 border-t border-[#222] pt-8 space-y-4">
+                    <span class="protocol-id text-xs text-[#ff4444] tracking-[0.2em] uppercase block mb-2">RESTRICTED — ARCHITECT ACCESS</span>
+                    <p class="text-[#555] text-xs mb-4">Private training modules and clinical alignment metrics. Accessible strictly by verified Architects.</p>
                 </div>
-            </details>
-
-            <!-- FAQ: Privacy / Black Swan -->
-            <details class="group bg-[#0a0a0a] border border-[#222] p-5 rounded-sm">
-                <summary class="cursor-pointer font-medium text-white flex justify-between items-center list-none">
-                    Protocol: Handling Privacy Complaints (The Glass Room)
-                    <svg class="w-4 h-4 transition group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 9l-7 7-7-7"></path></svg>
-                </summary>
-                <p class="mt-4 text-sm text-[#888] leading-relaxed">
-                    If a client expresses discomfort with the see-through glass panels, do not apologize or promise frosted glass. We operate in transparency.<br><br>
-                    <strong class="text-[#e0e0e0]">The Script:</strong> "I totally understand! We keep the glass clear because the work you are doing in here is the gold standard, and we want people to see it. But your comfort is priority one. I’m going to put you right here in Lane X—it's our stealth spot where you have total privacy from the window. You're safe with me."
-                </p>
-            </details>
+            </div>
         </div>
-    </div>
-</main>
+    </main>
 
-<script>
-    function setLang(lang) {
-        document.body.classList.remove('lang-en', 'lang-zh', 'lang-ms');
-        document.body.classList.add('lang-' + lang);
-        document.querySelectorAll('.lang-btn').forEach(btn => {
-            btn.classList.remove('text-white', 'border-white');
-            btn.classList.add('text-[#888]', 'border-transparent');
+    <script>
+        function setLang(lang) {
+            document.body.classList.remove('lang-en', 'lang-zh', 'lang-ms');
+            document.body.classList.add('lang-' + lang);
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('text-white', 'border-white');
+                btn.classList.add('text-[#888]', 'border-transparent');
+            });
+            const activeBtn = document.getElementById('btn-' + lang);
+            if (activeBtn) {
+                activeBtn.classList.remove('text-[#888]', 'border-transparent');
+                activeBtn.classList.add('text-white', 'border-white');
+            }
+            document.querySelectorAll('.flipboard-content.expanded').forEach(el => {
+                el.style.maxHeight = el.scrollHeight + "px";
+            });
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll(".tab-content").forEach(tab => tab.classList.remove("active"));
+            document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
+            const activeTab = document.getElementById("tab-" + tabId);
+            if (activeTab) activeTab.classList.add("active");
+            const activeBtn = document.getElementById("tab-btn-" + tabId);
+            if (activeBtn) activeBtn.classList.add("active");
+        }
+
+        function toggleFlipboard(button) {
+            const content = button.nextElementSibling;
+            const icon = button.querySelector('svg');
+            if (content.style.maxHeight) {
+                content.style.maxHeight = null;
+                content.classList.remove('expanded');
+                if (icon) icon.style.transform = 'rotate(0deg)';
+            } else {
+                content.style.maxHeight = content.scrollHeight + "px";
+                content.classList.add('expanded');
+                if (icon) icon.style.transform = 'rotate(180deg)';
+            }
+        }
+
+        const body = document.body;
+        const btnShepherd = document.getElementById("btn-shepherd");
+        const btnWolf = document.getElementById("btn-wolf");
+        const modal = document.getElementById("auth-modal");
+        const authBox = document.getElementById("auth-box");
+        const passInput = document.getElementById("passcode-input");
+        const errorMsg = document.getElementById("auth-error");
+
+        function setShepherdView() {
+            body.classList.remove("view-wolf");
+            btnShepherd.className = "w-full text-center py-2 text-xs font-semibold uppercase tracking-widest rounded-sm bg-[#222] text-white transition-all";
+            btnWolf.className = "w-full text-center py-2 text-xs font-semibold uppercase tracking-widest rounded-sm text-[#888] hover:text-white transition-all flex items-center justify-center gap-2 border border-[#222]";
+
+            const gatewayLink = document.getElementById('gateway-link');
+            if (gatewayLink) {
+                gatewayLink.innerHTML = '<span>← RETURN TO GATE</span>';
+                gatewayLink.href = 'https://the-obsidian-gate-five.vercel.app/';
+            }
+
+            document.querySelectorAll(".flipboard-content.expanded").forEach(el => {
+                el.style.maxHeight = el.scrollHeight + "px";
+            });
+        }
+
+        function requestWolfView() {
+            if (body.classList.contains("view-wolf")) return;
+            modal.classList.remove("hidden");
+            setTimeout(() => {
+                modal.classList.remove("opacity-0");
+                authBox.classList.remove("scale-95");
+            }, 10);
+            passInput.value = "";
+            errorMsg.classList.add("hidden");
+            passInput.focus();
+        }
+
+        function closeModal() {
+            modal.classList.add("opacity-0");
+            authBox.classList.add("scale-95");
+            setTimeout(() => modal.classList.add("hidden"), 300);
+        }
+
+        function verifyPasscode() {
+            if (passInput.value === "1800" || passInput.value === "0000") {
+                closeModal();
+                body.classList.add("view-wolf");
+                btnWolf.className = "w-full text-center py-2 text-xs font-semibold uppercase tracking-widest rounded-sm bg-[#222] text-white transition-all flex items-center justify-center gap-2 border border-white";
+                btnShepherd.className = "w-full text-center py-2 text-xs font-semibold uppercase tracking-widest rounded-sm text-[#888] hover:text-white transition-all flex items-center justify-center gap-2 border border-[#222]";
+
+                const gatewayLink = document.getElementById('gateway-link');
+                if (gatewayLink) {
+                    gatewayLink.innerHTML = '<span>← MASTER MENU</span>';
+                    gatewayLink.href = 'https://v0-m-o-e-master-dashboard.vercel.app/';
+                }
+            } else {
+                errorMsg.classList.remove("hidden");
+                passInput.value = "";
+                authBox.classList.add("translate-x-2");
+                setTimeout(() => authBox.classList.remove("translate-x-2"), 300);
+            }
+        }
+
+        passInput.addEventListener("keypress", function(e) {
+            if (e.key === "Enter") verifyPasscode();
         });
-        const activeBtn = document.getElementById('btn-' + lang);
-        if (activeBtn) {
-            activeBtn.classList.remove('text-[#888]', 'border-transparent');
-            activeBtn.classList.add('text-white', 'border-white');
-        }
-    }
-    
-    function switchTab(tabId) {
-        document.querySelectorAll(".tab-content").forEach(tab => tab.classList.remove("active"));
-        document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
-        const activeTab = document.getElementById("tab-" + tabId);
-        if (activeTab) activeTab.classList.add("active");
-        const activeBtn = document.getElementById("tab-btn-" + tabId);
-        if (activeBtn) activeBtn.classList.add("active");
-    }
 
-    function toggleFlipboard(button) {
-        const content = button.nextElementSibling;
-        const icon = button.querySelector('svg');
-        if (content.style.maxHeight) {
-            content.style.maxHeight = null;
-            content.classList.remove('expanded');
-            if(icon) icon.style.transform = 'rotate(0deg)';
-        } else {
-            content.style.maxHeight = content.scrollHeight + "px";
-            content.classList.add('expanded');
-            if(icon) icon.style.transform = 'rotate(180deg)';
+        window.onload = function() {
+            setLang('en');
         }
-    }
-    
-    window.onload = function() { setLang('en'); };
-</script>
+    </script>
 </body>
 </html>
