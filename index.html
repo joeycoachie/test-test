@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ops Kinetic | Instructor Terminal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;800&family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&family=JetBrains+Mono:wght@300;400;700&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #030303; color: #e0e0e0; -webkit-font-smoothing: antialiased; }
+        h1, h2, h3, h4, .font-serif { font-family: 'Playfair Display', serif; }
+        .protocol-id { font-family: 'JetBrains Mono', monospace; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #030303; }
+        ::-webkit-scrollbar-thumb { background: #222; }
+        ::-webkit-scrollbar-thumb:hover { background: #4CAF50; }
+        .flipboard-content { transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease-in-out; max-height: 0; opacity: 0; overflow: hidden; }
+        .flipboard-content.expanded { opacity: 1; }
+        .wolf-content { display: none; }
+        .shepherd-content { display: block; }
+        body.view-wolf .wolf-content { display: block; }
+        body.view-wolf .shepherd-content { display: none; }
+        body.lang-en [data-lang-zh], body.lang-en [data-lang-ms] { display: none !important; }
+        body.lang-zh [data-lang-en], body.lang-zh [data-lang-ms] { display: none !important; }
+        body.lang-ms [data-lang-en], body.lang-ms [data-lang-zh] { display: none !important; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .tab-btn.active { border-bottom: 2px solid #4CAF50; color: #fff; }
+        #auth-modal { backdrop-filter: blur(8px); }
+        .border-subtle { border-color: #222; }
+        .bg-subtle { background-color: #111; }
+        .text-accent { color: #888; }
+        .cue-block { border-left: 2px solid #1a1a1a; padding-left: 1rem; margin-bottom: 0.75rem; }
+        .cue-block.wolf { border-color: #3b82f6; }
+        .cue-block.shepherd { border-color: #4CAF50; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col md:flex-row lang-en selection:bg-[#4CAF50] selection:text-white pb-12 md:pb-0">
+
+    <div id="auth-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/80 transition-opacity duration-300 opacity-0">
+        <div class="bg-[#111] border border-[#333] p-8 rounded-sm w-full max-w-sm transform scale-95 transition-transform duration-300" id="auth-box">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="protocol-id tracking-widest text-[#4CAF50] uppercase text-xs">System Override</h3>
+                <button onclick="closeModal()" class="text-[#888] hover:text-white">&times;</button>
+            </div>
+            <p class="text-[#a3a3a3] text-sm mb-6">Enter Architect Passcode to unlock restricted training roadmaps and diagnostic overrides.</p>
+            <input type="password" id="passcode-input" class="w-full bg-[#050505] border border-[#333] text-white p-3 rounded-sm mb-4 focus:outline-none focus:border-[#4CAF50] font-mono text-center tracking-widest" placeholder="••••">
+            <p id="auth-error" class="text-[#ff4444] text-xs mb-4 hidden protocol-id">ACCESS DENIED.</p>
+            <button onclick="verifyPasscode()" class="w-full bg-[#222] hover:bg-[#4CAF50] text-white py-3 rounded-sm transition-colors text-sm font-medium tracking-wide uppercase">Unlock Architect View</button>
+        </div>
+    </div>
+
+    <aside class="w-full md:w-64 border-b md:border-b-0 md:border-r border-[#222] bg-[#090909] flex flex-col flex-shrink-0">
+        <div class="p-6 border-b border-[#222]">
+            <span class="protocol-id text-[#888] text-[9px] tracking-[0.25em] uppercase block mb-1">M.O.E. Operating System</span>
+            <h2 class="text-lg font-serif text-white tracking-tight">KINETIC HUB</h2>
+        </div>
+        <nav class="flex-1 p-6 space-y-6">
+            <div class="space-y-1">
+                <span class="protocol-id text-[9px] text-[#555] tracking-[0.2em] uppercase block mb-2 font-semibold">Gateway Control</span>
+                <a id="gateway-link" href="https://the-obsidian-gate-five.vercel.app/" class="flex items-center gap-3 text-xs text-[#888] hover:text-white transition-colors py-2 protocol-id">
+                    <span>← RETURN TO GATE</span>
+                </a>
+            </div>
+            <div class="space-y-3 border-t border-[#1a1a1a] pt-4">
+                <span class="protocol-id text-[9px] text-[#555] tracking-[0.2em] uppercase block font-semibold">Language Module</span>
+                <div class="flex flex-col gap-1.5">
+                    <button id="btn-en" onclick="setLang('en')" class="lang-btn text-left text-[11px] uppercase tracking-widest border border-white p-2.5 rounded-sm text-white transition-all protocol-id">English</button>
+                    <button id="btn-zh" onclick="setLang('zh')" class="lang-btn text-left text-[11px] uppercase tracking-widest border border-transparent p-2.5 rounded-sm text-[#888] hover:text-white transition-all protocol-id">中文 (ZH)</button>
+                    <button id="btn-ms" onclick="setLang('ms')" class="lang-btn text-left text-[11px] uppercase tracking-widest border border-transparent p-2.5 rounded-sm text-[#888] hover:text-white transition-all protocol-id">Bahasa (MS)</button>
+                </div>
+            </div>
+            <div class="space-y-3 border-t border-[#1a1a1a] pt-6">
+                <span class="protocol-id text-[9px] text-[#555] tracking-[0.2em] uppercase block font-semibold">Perspective</span>
+                <div class="flex flex-col gap-2">
+                    <button id="btn-shepherd" onclick="setShepherdView()" class="w-full text-center py-2 text-xs font-semibold uppercase tracking-widest rounded-sm bg-[#222] text-white transition-all">Instructor</button>
+                    <button id="btn-wolf" onclick="requestWolfView()" class="w-full text-center py-2 text-xs font-semibold uppercase tracking-widest rounded-sm text-[#888] hover:text-white transition-all flex items-center justify-center gap-2 border border-[#222]">
+                        Architect
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </nav>
+        <div class="p-6 border-t border-[#222] bg-[#050505]">
+            <p class="protocol-id text-[9px] text-[#4CAF50] uppercase tracking-wider">Node: Ops Kinetic</p>
+            <p class="protocol-id text-[9px] text-[#888]">Primacy standard v3.00</p>
+        </div>
+    </aside>
+
+    <main class="flex-1 p-6 md:p-12 space-y-12 overflow-y-auto max-w-6xl">
+
+        <div class="flex overflow-x-auto border-b border-[#222] gap-8 protocol-id text-xs tracking-widest uppercase text-[#888] pb-1">
+            <button id="tab-btn-dashboard" class="tab-btn active pb-3 whitespace-nowrap hover:text-white transition-colors" onclick="switchTab('dashboard')">Dashboard</button>
+            <button id="tab-btn-calibration" class="tab-btn pb-3 whitespace-nowrap hover:text-white transition-colors" onclick="switchTab('calibration')">Calibration Manual</button>
+            <button id="tab-btn-armory" class="tab-btn pb-3 whitespace-nowrap hover:text-white transition-colors" onclick="switchTab('armory')">Cueing Armory</button>
+            <button id="tab-btn-unwind" class="tab-btn pb-3 whitespace-nowrap hover:text-white transition-colors" onclick="switchTab('unwind')">KIN-013 Unwind</button>
+            <button id="tab-btn-academy" class="tab-btn pb-3 whitespace-nowrap hover:text-[#a3a3a3] transition-colors" onclick="switchTab('academy')">The Academy</button>
+        </div>
+
+        <div id="tab-dashboard" class="tab-content active space-y-12">
+            <div class="bg-subtle border border-subtle p-8 md:p-12 rounded-sm relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-64 h-64 bg-[#4CAF50] opacity-5 blur-[100px]"></div>
+                <p class="protocol-id text-xs text-[#4CAF50] mb-3 tracking-widest uppercase font-semibold">Active Session OS</p>
+                <h2 class="text-4xl font-serif text-white mb-4 tracking-tight" data-lang-en>Standardized Floor Calibration</h2>
+                <h2 class="text-4xl font-serif text-white mb-4 tracking-tight" data-lang-zh>标准化地面校准体系</h2>
+                <h2 class="text-4xl font-serif text-white mb-4 tracking-tight" data-lang-ms>Kalibrasi Lantai Standard</h2>
+                <p class="text-[#a3a3a3] text-sm leading-relaxed max-w-3xl mb-8" data-lang-en>Welcome to the central instructor interface. Under the <strong>Skeleton & Skin Protocol</strong>, you are responsible for absolute clinical execution of the non-negotiable gates (The Skeleton) while maintaining your personal flair, pacing, and client-connection methods (The Skin).</p>
+                <p class="text-[#a3a3a3] text-sm leading-relaxed max-w-3xl mb-8" data-lang-zh>欢迎使用中央教练终端。在 <strong>"骨架与皮肤"双轨协议</strong> 下，您需要严格执行生物力学安全关卡（骨架），同时保留个人教学魅力、节奏掌控和与客户的情感联结（皮肤）。</p>
+                <p class="text-[#a3a3a3] text-sm leading-relaxed max-w-3xl mb-8" data-lang-ms>Selamat datang ke portal utama tenaga pengajar. Di bawah <strong>Protokol Skeleton & Skin</strong>, anda bertanggungjawab sepenuhnya ke atas pelaksanaan klinikal sempadan tegar (Skeleton) sambil mengekalkan gaya peribadi, tempo, dan kaedah komunikasi anda (Skin).</p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+                    <div class="border border-[#222] p-5 bg-[#050505]">
+                        <span class="text-[#4CAF50] text-2xl block mb-2 font-serif font-semibold">01</span>
+                        <h4 class="text-white text-sm font-medium mb-1.5" data-lang-en>Standardized Safety</h4>
+                        <h4 class="text-white text-sm font-medium mb-1.5" data-lang-zh>标准化安全屏障</h4>
+                        <h4 class="text-white text-sm font-medium mb-1.5" data-lang-ms>Keselamatan Standard</h4>
+                        <p class="text-xs text-[#888] leading-relaxed" data-lang-en>Ensure the 6 Kinetic Gates are closed before increasing load or speed.</p>
+                        <p class="text-xs text-[#888] leading-relaxed" data-lang-zh>在增加负荷或节奏前，确保 6 大动能安全关卡完全锁定闭合。</p>
+                        <p class="text-xs text-[#888] leading-relaxed" data-lang-ms>Pastikan 6 Gerbang Kinetik ditutup sebelum menambah beban atau kelajuan.</p>
+                    </div>
+                    <div class="border border-[#222] p-5 bg-[#050505]">
+                        <span class="text-[#4CAF50] text-2xl block mb-2 font-serif font-semibold">02</span>
+                        <h4 class="text-white text-sm font-medium mb-1.5" data-lang-en>No Clinical Jargon</h4>
+                        <h4 class="text-white text-sm font-medium mb-1.5" data-lang-zh>严禁堆砌临床术语</h4>
+                        <h4 class="text-white text-sm font-medium mb-1.5" data-lang-ms>Tanpa Jargon Klinikal</h4>
+                        <p class="text-xs text-[#888] leading-relaxed" data-lang-en>Ditch the heavy textbooks. Use system-authorized spatial and imagery cues on the floor.</p>
+                        <p class="text-xs text-[#888] leading-relaxed" data-lang-zh>抛弃生硬的教科书词汇。在地面教学中使用系统授权的、生动的空间意象提示。</p>
+                        <p class="text-xs text-[#888] leading-relaxed" data-lang-ms>Tinggalkan buku teks yang tebal. Gunakan isyarat visual dan ruang di atas lantai studio.</p>
+                    </div>
+                    <div class="border border-[#222] p-5 bg-[#050505]">
+                        <span class="text-[#4CAF50] text-2xl block mb-2 font-serif font-semibold">03</span>
+                        <h4 class="text-white text-sm font-medium mb-1.5" data-lang-en>Continuous Alignment</h4>
+                        <h4 class="text-white text-sm font-medium mb-1.5" data-lang-zh>持续校准评估</h4>
+                        <h4 class="text-white text-sm font-medium mb-1.5" data-lang-ms>Penjajaran Berterusan</h4>
+                        <p class="text-xs text-[#888] leading-relaxed" data-lang-en>Always run the 3-question client assessment prior to onboarding extremity loads.</p>
+                        <p class="text-xs text-[#888] leading-relaxed" data-lang-zh>在开始给四肢加载弹簧负力前，必须对客户进行 3 题核心筛查评估。</p>
+                        <p class="text-xs text-[#888] leading-relaxed" data-lang-ms>Sentiasa jalankan penilaian 3 soalan pelanggan sebelum menambah beban luaran.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-[#111] border border-[#222] p-8 rounded-sm relative overflow-hidden">
+                <span class="protocol-id text-xs text-[#ff4444] tracking-[0.2em] uppercase block mb-2 font-bold">/// ACTIVE OPERATIONAL DIRECTIVES ///</span>
+                <h3 class="text-2xl font-serif text-white mb-4">Immediate Floor Corrections</h3>
+                
+                <div class="space-y-6 mt-6">
+                    <div class="border-l-2 border-[#ff4444] pl-4">
+                        <h4 class="text-white font-semibold text-sm mb-1 uppercase tracking-widest protocol-id">01. Gate 4 Mandate: Eye Gaze</h4>
+                        <p class="text-[#a3a3a3] text-sm">Where the eyes go, the spine follows. If a client's cervical spine drops during transitions, it is because their eyes dropped. <strong class="text-white">Mandate: Dictate exactly where the client's eyes must look during every load transfer.</strong></p>
+                    </div>
+                    
+                    <div class="border-l-2 border-[#4CAF50] pl-4">
+                        <h4 class="text-white font-semibold text-sm mb-1 uppercase tracking-widest protocol-id">02. Spatial Command: The Middle Child</h4>
+                        <p class="text-[#a3a3a3] text-sm">Do not let latecomers wander or back-row clients hide. <strong class="text-white">Mandate: Within the first 5 minutes, visually sweep the room and deliver a distant verbal cue, by name, to the client furthest away from you.</strong> Own the room.</p>
+                    </div>
+
+                    <div class="border-l-2 border-[#3b82f6] pl-4">
+                        <h4 class="text-white font-semibold text-sm mb-1 uppercase tracking-widest protocol-id">03. End of Class: The Zero-Spring Reset</h4>
+                        <p class="text-[#a3a3a3] text-sm">After the KIN-013 Unwind, clients must wipe down the carriage. <strong class="text-white">Mandate: All springs must be unhooked. Stopper and gear bar returned to neutral. Leave the floor perfectly reset for the next operator.</strong></p>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
+        <div id="tab-calibration" class="tab-content space-y-8">
+            <div class="mb-4">
+                <span class="protocol-id text-xs text-[#3b82f6] tracking-[0.2em] uppercase block mb-1">Standardized Metrics</span>
+                <h2 class="text-3xl font-serif text-white tracking-tight" data-lang-en>The Kinetic Six Visual Matrix</h2>
+                <h2 class="text-3xl font-serif text-white tracking-tight" data-lang-zh>动能六大安全关卡图表</h2>
+                <h2 class="text-3xl font-serif text-white tracking-tight" data-lang-ms>Matriks Visual Enam Kinetik</h2>
+            </div>
+            <div class="space-y-4">
+                <div class="bg-subtle border border-subtle rounded-sm">
+                    <button class="w-full text-left p-5 flex items-center justify-between focus:outline-none hover:bg-[#1a1a1a] transition-colors" onclick="toggleFlipboard(this)">
+                        <div>
+                            <p class="protocol-id text-[10px] text-[#3b82f6] tracking-[0.2em] uppercase mb-1">GATE 01</p>
+                            <h3 class="text-xl font-serif text-white">
+                                <span data-lang-en>The Core Anchor</span>
+                                <span data-lang-zh>核心之锚</span>
+                                <span data-lang-ms>Sauh Teras</span>
+                                <span class="wolf-content text-accent italic text-base ml-2">Pelvic Neutrality</span>
+                            </h3>
+                        </div>
+                        <svg class="w-5 h-5 text-accent transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="flipboard-content bg-[#0a0a0a] border-t border-subtle">
+                        <div class="shepherd-content p-6">
+                            <p class="text-[#e0e0e0] font-medium mb-4" data-lang-en>Rule: Keep the hips steady and level before moving the legs.</p>
+                            <p class="text-[#e0e0e0] font-medium mb-4" data-lang-zh>守则：在开始腿部动作前，保持臀部（骨盆）稳定中立且两侧等高。</p>
+                            <p class="text-[#e0e0e0] font-medium mb-4" data-lang-ms>Peraturan: Pastikan pinggul stabil dan seimbang sebelum menggerakkan kaki.</p>
+                            <ul class="space-y-2 text-sm text-[#a3a3a3] list-disc list-inside">
+                                <li data-lang-en>Make sure the client's lower back isn't aggressively arching off the mat.</li>
+                                <li data-lang-en>The client should feel their deep stomach muscles working, not their lower back squeezing.</li>
+                                <li data-lang-zh>确保客户的下背部没有过度拱起、完全脱离垫子。</li>
+                                <li data-lang-zh>客户应当感受到肚脐深处的核心发力，而不是后腰肌肉的紧张挤压。</li>
+                                <li data-lang-ms>Pastikan bahagian belakang bawah pelanggan tidak melengkung secara agresif dari mat.</li>
+                                <li data-lang-ms>Pelanggan patut merasakan otot perut dalaman bekerja, bukannya belakang bawah yang tegang.</li>
+                            </ul>
+                        </div>
+                        <div class="wolf-content p-6 grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div>
+                                <h4 class="protocol-id text-xs text-white mb-3 tracking-widest uppercase">Target Elements</h4>
+                                <ul class="space-y-2 text-sm text-[#a3a3a3]">
+                                    <li class="flex gap-2"><span class="text-[#4CAF50]">•</span> Alignment of ASIS and Pubic Symphysis.</li>
+                                    <li class="flex gap-2"><span class="text-[#4CAF50]">•</span> Transversus Abdominis (TVA) co-contraction.</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="protocol-id text-xs text-white mb-3 tracking-widest uppercase">Milestones & Failures</h4>
+                                <ul class="space-y-2 text-sm text-[#a3a3a3]">
+                                    <li class="flex gap-2"><span class="text-[#3b82f6]">→</span> <strong class="text-white">Fail:</strong> Tucking the pelvis (posterior tilt) to compensate for weak core loading.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-subtle border border-subtle rounded-sm">
+                    <button class="w-full text-left p-5 flex items-center justify-between focus:outline-none hover:bg-[#1a1a1a] transition-colors" onclick="toggleFlipboard(this)">
+                        <div>
+                            <p class="protocol-id text-[10px] text-[#3b82f6] tracking-[0.2em] uppercase mb-1">GATE 02</p>
+                            <h3 class="text-xl font-serif text-white">
+                                <span data-lang-en>The Spine Wave</span>
+                                <span data-lang-zh>脊柱之浪</span>
+                                <span data-lang-ms>Gelombang Tulang Belakang</span>
+                                <span class="wolf-content text-accent italic text-base ml-2">Spinal Articulation</span>
+                            </h3>
+                        </div>
+                        <svg class="w-5 h-5 text-accent transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="flipboard-content bg-[#0a0a0a] border-t border-subtle">
+                        <div class="shepherd-content p-6">
+                            <p class="text-[#e0e0e0] font-medium mb-4" data-lang-en>Rule: Move the back smoothly, bone by bone.</p>
+                            <p class="text-[#e0e0e0] font-medium mb-4" data-lang-zh>守则：逐节、流畅地活动脊椎骨骼。</p>
+                            <p class="text-[#e0e0e0] font-medium mb-4" data-lang-ms>Peraturan: Gerakkan belakang dengan lancar, satu demi satu ruas tulang.</p>
+                            <ul class="space-y-2 text-sm text-[#a3a3a3] list-disc list-inside">
+                                <li data-lang-en>Cue them to imagine a pearl necklace lifting off a table one pearl at a time.</li>
+                                <li data-lang-en>Watch out for clients just hinging up from their lower back.</li>
+                                <li data-lang-zh>提示他们想象一串珍珠项链从桌上被逐颗提起的平滑曲线。</li>
+                                <li data-lang-zh>微小关卡：谨防客户出现直接从后腰折叠、板块式平直起落的情况。</li>
+                                <li data-lang-ms>Bayangkan seutas rantai mutiara yang diangkat dari meja satu persatu.</li>
+                                <li data-lang-ms>Perhatikan jika pelanggan melentur terus dari bahagian bawah pinggang.</li>
+                            </ul>
+                        </div>
+                        <div class="wolf-content p-6 grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div>
+                                <h4 class="protocol-id text-xs text-white mb-3 tracking-widest uppercase">Target Elements</h4>
+                                <ul class="space-y-2 text-sm text-[#a3a3a3]">
+                                    <li class="flex gap-2"><span class="text-[#4CAF50]">•</span> Sequential segment-by-segment spinal mobility (flexion/extension).</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="protocol-id text-xs text-white mb-3 tracking-widest uppercase">Milestones & Failures</h4>
+                                <ul class="space-y-2 text-sm text-[#a3a3a3]">
+                                    <li class="flex gap-2"><span class="text-[#3b82f6]">→</span> <strong class="text-white">Fail:</strong> Hinge points at the thoracolumbar junction. Spine moves as a single block.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-subtle border border-subtle rounded-sm">
+                    <button class="w-full text-left p-5 flex items-center justify-between focus:outline-none hover:bg-[#1a1a1a] transition-colors" onclick="toggleFlipboard(this)">
+                        <div>
+                            <p class="protocol-id text-[10px] text-[#3b82f6] tracking-[0.2em] uppercase mb-1">GATE 03</p>
+                            <h3 class="text-xl font-serif text-white">
+                                <span data-lang-en>The Side Firewall</span>
+                                <span data-lang-zh>侧向防火墙</span>
+                                <span data-lang-ms>Dinding Sisi</span>
+                                <span class="wolf-content text-accent italic text-base ml-2">Lateral Stability</span>
+                            </h3>
+                        </div>
+                        <svg class="w-5 h-5 text-accent transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="flipboard-content bg-[#0a0a0a] border-t border-subtle">
+                        <div class="shepherd-content p-6">
+                            <p class="text-[#e0e0e0] font-medium mb-4" data-lang-en>Rule: Keep the sides of the waist equally long during side-work.</p>
+                            <p class="text-[#e0e0e0] font-medium mb-4" data-lang-zh>守则：侧向练习中保持侧腰等长，不可缩短塌陷。</p>
+                            <p class="text-[#e0e0e0] font-medium mb-4" data-lang-ms>Peraturan: Pastikan kedua-dua belah pinggang sama panjang semasa baringan sisi.</p>
+                            <ul class="space-y-2 text-sm text-[#a3a3a3] list-disc list-inside">
+                                <li data-lang-en>Don't let them collapse their ribs into the mat when lying on their side.</li>
+                                <li data-lang-en>Keep a small "mouse house" space under their bottom waist.</li>
+                                <li data-lang-zh>侧卧时，切勿让身体下侧的肋骨软塌塌地压实垫面。</li>
+                                <li data-lang-zh>保持下方侧腰处有一条可以让"小老鼠穿过的小屋"般的悬空缝隙。</li>
+                                <li data-lang-ms>Elakkan rusuk jatuh ke mat semasa pelanggan berbaring di sisi.</li>
+                                <li data-lang-ms>Kekalkan ruang kecil di bawah pinggang sisi bawah (mouse house).</li>
+                            </ul>
+                        </div>
+                        <div class="wolf-content p-6 grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div>
+                                <h4 class="protocol-id text-xs text-white mb-3 tracking-widest uppercase">Target Elements</h4>
+                                <ul class="space-y-2 text-sm text-[#a3a3a3]">
+                                    <li class="flex gap-2"><span class="text-[#4CAF50]">•</span> Quadratus Lumborum (QL) and Oblique stabilization.</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="protocol-id text-xs text-white mb-3 tracking-widest uppercase">Milestones & Failures</h4>
+                                <ul class="space-y-2 text-sm text-[#a3a3a3]">
+                                    <li class="flex gap-2"><span class="text-[#3b82f6]">→</span> <strong class="text-white">Fail:</strong> Dropping into the resting shoulder or resting hip joint.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div class="bg-subtle border border-subtle rounded-sm">
+<button class="w-full text-left p-5 flex items-center justify-between focus:outline-none hover:bg-[#1a1a1a] transition-colors" onclick="toggleFlipboard(this)">
+<div>
+<p class="protocol-id text-[10px] text-[#3b82f6] tracking-[0.2em] uppercase mb-1">GATE 04</p>
+<h3 class="text-xl font-serif text-white">
+<span data-lang-en>The Shield (Cervical & Scapular)</span>
+<span data-lang-zh>肩颈护盾</span>
+<span data-lang-ms>Pelindung Bahu & Leher</span>
+<span class="wolf-content text-accent italic text-base ml-2">Scapular Glide & Cervical Neutrality</span>
+</h3>
+</div>
+<svg class="w-5 h-5 text-accent transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 9l-7 7-7-7"></path></svg>
+</button>
+<div class="flipboard-content bg-[#0a0a0a] border-t border-subtle">
+<div class="shepherd-content p-6">
+<p class="text-[#e0e0e0] font-medium mb-4" data-lang-en>Rule: Shoulders wide and down. The master switch for the neck is the Eye Gaze.</p>
+<p class="text-[#e0e0e0] font-medium mb-4" data-lang-zh>守则：双肩向下沉并向两侧展宽。颈椎的安全开关在于“视线控制”。</p>
+<p class="text-[#e0e0e0] font-medium mb-4" data-lang-ms>Peraturan: Bahu ditarik ke bawah dan melebar. Suis utama untuk leher adalah Arah Pandangan (Eye Gaze).</p>
+<ul class="space-y-2 text-sm text-[#a3a3a3] list-disc list-inside">
+<li data-lang-en>Dictate exactly where the client's eyes should look. Where the eyes go, the spine follows.</li>
+<li data-lang-en>If eyes drop to the floor during a transition, the cervical spine drops, and the gate fails.</li>
+<li data-lang-zh>明确指示客户眼睛应该看向哪里。视线看向何处，脊柱就跟随到何处。</li>
+<li data-lang-zh>如果转换动作时视线掉向地板，颈椎就会塌陷，关卡即告失败。</li>
+<li data-lang-ms>Arahkan dengan tepat ke mana pelanggan patut memandang. Ke mana mata pergi, tulang belakang akan mengikut.</li>
+<li data-lang-ms>Jika mata tunduk ke lantai semasa transisi, tulang leher akan jatuh, dan kawalan gagal.</li>
+</ul>
+</div>
+<div class="wolf-content p-6 grid grid-cols-1 md:grid-cols-2 gap-8">
+<div>
+<h4 class="protocol-id text-xs text-white mb-3 tracking-widest uppercase">Target Elements</h4>
+<ul class="space-y-2 text-sm text-[#a3a3a3]">
+<li class="flex gap-2"><span class="text-[#4CAF50]">*</span> Serratus anterior and lower trapezius dominance.</li>
+<li class="flex gap-2"><span class="text-[#4CAF50]">*</span> Deep cervical flexor activation via occulo-motor reflex.</li>
+</ul>
+</div>
+<div>
+<h4 class="protocol-id text-xs text-white mb-3 tracking-widest uppercase">Milestones & Failures</h4>
+<ul class="space-y-2 text-sm text-[#a3a3a3]">
+<li class="flex gap-2"><span class="text-[#3b82f6]">→</span> <strong class="text-white">Fail:</strong> Cervical spine compression due to upper trapezius hyper-activation and dropped eye gaze.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+                <div class="bg-subtle border border-subtle rounded-sm">
+                    <button class="w-full text-left p-5 flex items-center justify-between focus:outline-none hover:bg-[#1a1a1a] transition-colors" onclick="toggleFlipboard(this)">
+                        <div>
+                            <p class="protocol-id text-[10px] text-[#3b82f6] tracking-[0.2em] uppercase mb-1">GATE 05</p>
+                            <h3 class="text-xl font-serif text-white">
+                                <span data-lang-en>The Lock</span>
+                                <span data-lang-zh>闭链锁扣</span>
+                                <span data-lang-ms>Kunci Sendi</span>
+                                <span class="wolf-content text-accent italic text-base ml-2">Closed-Chain Compression</span>
+                            </h3>
+                        </div>
+                        <svg class="w-5 h-5 text-accent transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="flipboard-content bg-[#0a0a0a] border-t border-subtle">
+                        <div class="shepherd-content p-6">
+                            <p class="text-[#e0e0e0] font-medium mb-4" data-lang-en>Rule: Use the footbar and straps to create joint stability.</p>
+                            <p class="text-[#e0e0e0] font-medium mb-4" data-lang-zh>守则：巧妙利用脚杆、弹簧阻力和拉手产生深层关节的向心挤压和稳定性。</p>
+                            <p class="text-[#e0e0e0] font-medium mb-4" data-lang-ms>Peraturan: Gunakan pemijak kaki dan tali untuk kestabilan sendi.</p>
+                            <ul class="space-y-2 text-sm text-[#a3a3a3] list-disc list-inside">
+                                <li data-lang-en>Clients shouldn't lock out their knees or elbows sharply.</li>
+                                <li data-lang-en>Use the springs to guide the movement, don't just let the springs throw them around.</li>
+                                <li data-lang-zh>严禁客户猛烈地锁死膝盖或手肘关节。</li>
+                                <li data-lang-zh>在向心和离心阶段均用肌肉控制阻力，绝非任由弹簧将肢体弹甩回去。</li>
+                                <li data-lang-ms>Elakkan pelanggan mengunci mati lutut atau siku mereka secara mendadak.</li>
+                                <li data-lang-ms>Gunakan spring untuk mengawal pergerakan, bukan ditarik kasar oleh spring.</li>
+                            </ul>
+                        </div>
+                        <div class="wolf-content p-6 grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div>
+                                <h4 class="protocol-id text-xs text-white mb-3 tracking-widest uppercase">Target Elements</h4>
+                                <ul class="space-y-2 text-sm text-[#a3a3a3]">
+                                    <li class="flex gap-2"><span class="text-[#4CAF50]">•</span> Co-contraction of muscles surrounding active joints to eliminate shear.</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="protocol-id text-xs text-white mb-3 tracking-widest uppercase">Milestones & Failures</h4>
+                                <ul class="space-y-2 text-sm text-[#a3a3a3]">
+                                    <li class="flex gap-2"><span class="text-[#3b82f6]">→</span> <strong class="text-white">Fail:</strong> Sharp end-range hyperextension under heavy spring tension.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-subtle border border-[#3b82f6]/40 rounded-sm">
+                    <button class="w-full text-left p-5 flex items-center justify-between focus:outline-none hover:bg-[#111] transition-colors" onclick="toggleFlipboard(this)">
+                        <div>
+                            <p class="protocol-id text-[10px] text-[#4CAF50] tracking-[0.2em] uppercase mb-1">GATE 06: THE FINISHER</p>
+                            <h3 class="text-xl font-serif text-white">
+                                <span data-lang-en>The Unwind</span>
+                                <span data-lang-zh>身心释压</span>
+                                <span data-lang-ms>Decompress</span>
+                                <span class="wolf-content text-accent italic text-base ml-2">Protocol KIN-013</span>
+                            </h3>
+                        </div>
+                        <svg class="w-5 h-5 text-accent transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="flipboard-content bg-[#050505] border-t border-[#3b82f6]/20">
+                        <div class="shepherd-content p-6">
+                            <p class="text-[#e0e0e0] font-medium mb-4" data-lang-en>Rule: The mandatory 5-minute protocol to decompress the spine and flush the joints.</p>
+                            <p class="text-[#e0e0e0] font-medium mb-4" data-lang-zh>守则：在每堂课结尾强制执行 5 分钟的脊柱释放和关节冲洗阻力方案。</p>
+                            <p class="text-[#e0e0e0] font-medium mb-4" data-lang-ms>Peraturan: Protokol wajib 5 minit untuk meregangkan tulang belakang dan sendi.</p>
+                            <ul class="space-y-2 text-sm text-[#a3a3a3] list-disc list-inside">
+                                <li data-lang-en>Lower your voice ("Late Night DJ") to calm their nervous system.</li>
+                                <li data-lang-en>Guide them through the 6 precise stretching movements of the Unwind.</li>
+                                <li data-lang-zh>降低您的说话音量（转换为"深夜FM电台DJ音色"）来安抚客户神经系统。</li>
+                                <li data-lang-zh>引导他们进行 Unwind（卸载压力）方案的六项经典体位拉伸。</li>
+                                <li data-lang-ms>Turunkan nada suara anda ("Late Night DJ") untuk menenang sistem saraf.</li>
+                                <li data-lang-ms>Bimbing mereka melakukan 6 gerakan regangan Unwind dengan teliti.</li>
+                            </ul>
+                        </div>
+                        <div class="wolf-content p-6 grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div>
+                                <h4 class="protocol-id text-xs text-white mb-3 tracking-widest uppercase">Target Elements</h4>
+                                <ul class="space-y-2 text-sm text-[#a3a3a3]">
+                                    <li class="flex gap-2"><span class="text-[#4CAF50]">•</span> Transition from Sympathetic (fight/flight) to Parasympathetic (rest/digest) state.</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="protocol-id text-xs text-white mb-3 tracking-widest uppercase">Milestones & Failures</h4>
+                                <ul class="space-y-2 text-sm text-[#a3a3a3]">
+                                    <li class="flex gap-2"><span class="text-[#3b82f6]">→</span> <strong class="text-white">Fail:</strong> Rushing through transitions; maintaining a loud, high-tempo vocal delivery.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-armory" class="tab-content space-y-12">
+            <div class="mb-4">
+                <span class="protocol-id text-xs text-[#4CAF50] tracking-[0.2em] uppercase block mb-1">Protocol: SYS-P049</span>
+                <h2 class="text-3xl font-serif text-white tracking-tight" data-lang-en>The Dual-Cueing Translator & Glossary</h2>
+                <h2 class="text-3xl font-serif text-white tracking-tight" data-lang-zh>双轨提示转换词典与词汇表</h2>
+                <h2 class="text-3xl font-serif text-white tracking-tight" data-lang-ms>Glosari & Penterjemah Isyarat Dwi-Bahasa</h2>
+                <p class="text-[#888] text-sm mt-2 max-w-3xl leading-relaxed" data-lang-en>Always secure the biomechanical safety (Wolf cue) first, then paint the mental image (Shepherd cue). Use the glossary below to translate clinical textbook terminology.</p>
+                <p class="text-[#888] text-sm mt-2 max-w-3xl leading-relaxed" data-lang-zh>始终先确保生物力学安全（Wolf 提示），然后立即描绘心理意象（Shepherd 提示）。使用下方的对照表转换枯燥的临床教科书术语。</p>
+                <p class="text-[#888] text-sm mt-2 max-w-3xl leading-relaxed" data-lang-ms>Sentiasa pastikan keselamatan biomekanikal (isyarat Wolf) diutamakan, kemudian gambarkan imej mental (isyarat Shepherd). Gunakan glosari di bawah untuk menterjemah istilah buku teks klinikal.</p>
+            </div>
+            <div class="border border-[#222] bg-[#0a0a0a] p-6 rounded-sm space-y-4">
+                <span class="protocol-id text-xs text-[#3b82f6] tracking-[0.2em] uppercase block">INSTRUCTOR ONBOARDING BRIDGE</span>
+                <h4 class="text-lg font-serif text-white" data-lang-en>Flow Education vs. Optimum Fit Mapping</h4>
+                <h4 class="text-lg font-serif text-white" data-lang-zh>教科书术语与实战意象对照表</h4>
+                <h4 class="text-lg font-serif text-white" data-lang-ms>Pemetaan Pendidikan Aliran vs Optimum Fit</h4>
+                <p class="text-xs text-[#888]" data-lang-en>Use this reference table to resolve clinical name variations and teach with confidence on Saturday.</p>
+                <p class="text-xs text-[#888]" data-lang-zh>使用此对照表，消除不同培训体系中的命名差异，在周六的演练中充满信心地授课。</p>
+                <p class="text-xs text-[#888]" data-lang-ms>Gunakan jadual rujukan ini untuk menyelesaikan perbezaan istilah dan mengajar dengan penuh yakin pada hari Sabtu.</p>
+                <div class="overflow-x-auto mt-4">
+                    <table class="w-full text-left border-collapse text-xs md:text-sm">
+                        <thead>
+                            <tr class="border-b border-[#222] bg-[#111] text-[#888]">
+                                <th class="p-3 protocol-id tracking-wider uppercase">Proprietary Name</th>
+                                <th class="p-3 protocol-id tracking-wider uppercase">Clinical / Textbook Equivalent</th>
+                                <th class="p-3 protocol-id tracking-wider uppercase">Key Biomechanics (Wolf)</th>
+                                <th class="p-3 protocol-id tracking-wider uppercase">Somatic Metaphor (Shepherd)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-[#1a1a1a] text-gray-400">
+                            <tr><td class="p-3 text-white font-medium">The Barber Pole</td><td class="p-3 font-mono">Short Box Spine Rotation</td><td class="p-3">Thoracic rotation, hip stability</td><td class="p-3 italic">"Spiral staircase wrung out to ceiling"</td></tr>
+                            <tr><td class="p-3 text-white font-medium">Climbing the Trunk</td><td class="p-3 font-mono">Climb A Tree (Tree Prep)</td><td class="p-3">Hamstring flexibility, spine wave</td><td class="p-3 italic">"Walk your hands up a tree trunk"</td></tr>
+                            <tr><td class="p-3 text-white font-medium">The Arrowhead</td><td class="p-3 font-mono">Thoracic Extension on Box</td><td class="p-3">Scapular depression, rhomboid load</td><td class="p-3 italic">"Shoot crown of head forward, grow taller"</td></tr>
+                            <tr><td class="p-3 text-white font-medium">Thread the Needle</td><td class="p-3 font-mono">Quadruped Thoracic Rotation</td><td class="p-3">Oblique core drive, rib cage open</td><td class="p-3 italic">"Wring out lungs like a wet towel"</td></tr>
+                            <tr><td class="p-3 text-white font-medium">The Windmill</td><td class="p-3 font-mono">Short Box Side Stretch</td><td class="p-3">Quadratus Lumborum release, rib lock</td><td class="p-3 italic">"Pulled safely in opposite directions"</td></tr>
+                            <tr><td class="p-3 text-white font-medium">Pearls Off Mat</td><td class="p-3 font-mono">Pelvic Curl / Spine Roll</td><td class="p-3">Segmental spinal articulation, TVA load</td><td class="p-3 italic">"Lift a string of heavy pearls bone-by-bone"</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="border border-[#222] bg-[#0a0a0a] rounded-sm overflow-hidden">
+                <table class="w-full text-left border-collapse text-xs md:text-sm">
+                    <thead>
+                        <tr class="border-b border-[#222] bg-[#111] text-[#888]">
+                            <th class="p-4 protocol-id tracking-wider uppercase">Clinical Term (Wolf)</th>
+                            <th class="p-4 protocol-id tracking-wider uppercase">Spatial Cue (Shepherd)</th>
+                            <th class="p-4 protocol-id tracking-wider uppercase">Target Outcome</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-[#1a1a1a]">
+                        <tr>
+                            <td class="p-4 font-mono text-white">Concentric Trunk Flexion</td>
+                            <td class="p-4 italic text-[#a3a3a3]">
+                                <span data-lang-en>"Scoop your belly button into your spine."</span>
+                                <span data-lang-zh>"将你的肚脐深吸贴向脊柱。"</span>
+                                <span data-lang-ms>"Tarik pusat anda rapat ke dalam tulang belakang."</span>
+                            </td>
+                            <td class="p-4 text-[#888]">True abdominal hollow and spine articulation.</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-mono text-white">Scapular Depression</td>
+                            <td class="p-4 italic text-[#a3a3a3]">
+                                <span data-lang-en>"Slide your shoulder blades into your back pockets."</span>
+                                <span data-lang-zh>"将肩膀沉下，肩胛骨向下滑入后方裤兜。"</span>
+                                <span data-lang-ms>"Luncurkan tulang belikat anda ke dalam poket belakang."</span>
+                            </td>
+                            <td class="p-4 text-[#888]">Immediate shoulder stabilization and neck release.</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-mono text-white">Neutral Pelvis</td>
+                            <td class="p-4 italic text-[#a3a3a3]">
+                                <span data-lang-en>"Level your hips like a bowl of soup."</span>
+                                <span data-lang-zh>"端平你的骨盆，像端着一碗满得快要溢出的汤。"</span>
+                                <span data-lang-ms>"Seimbangkan pinggul anda seperti semangkuk sup."</span>
+                            </td>
+                            <td class="p-4 text-[#888]">Elimination of joint-compressing pelvic tilt.</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-mono text-white">Lumbo-pelvic Stability</td>
+                            <td class="p-4 italic text-[#a3a3a3]">
+                                <span data-lang-en>"Imagine a corset tightening around your waist."</span>
+                                <span data-lang-zh>"想象腹部有一圈马甲束身带正在均匀向中心绑紧。"</span>
+                                <span data-lang-ms>"Bayangkan tali pinggang korset mengetat di keliling pinggang."</span>
+                            </td>
+                            <td class="p-4 text-[#888]">Deep core engagement prior to extremity loading.</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-mono text-white">Cervical Extension</td>
+                            <td class="p-4 italic text-[#a3a3a3]">
+                                <span data-lang-en>"Lengthen the crown of your head to the wall."</span>
+                                <span data-lang-zh>"将你的头顶向墙壁方向无限延伸。"</span>
+                                <span data-lang-ms>"Panjangkan ubun-ubun kepala anda ke arah dinding."</span>
+                            </td>
+                            <td class="p-4 text-[#888]">Correct alignment of the cervical-thoracic junction.</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-mono text-white">Knee-to-Toe Tracking</td>
+                            <td class="p-4 italic text-[#a3a3a3]">
+                                <span data-lang-en>"Keep your knees on the train tracks."</span>
+                                <span data-lang-zh>"让你的膝盖像在火车轨道上一样保持笔直前行。"</span>
+                                <span data-lang-ms>"Pastikan lutut anda bergerak lurus seperti di atas landasan kereta api."</span>
+                            </td>
+                            <td class="p-4 text-[#888]">Safe, linear lower-limb tracking.</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-mono text-white">Eccentric Spinal Articulation</td>
+                            <td class="p-4 italic text-[#a3a3a3]">
+                                <span data-lang-en>"Melt down bone-by-bone like warm wax."</span>
+                                <span data-lang-zh>"像热蜡一样，将脊椎逐节融化在垫子上。"</span>
+                                <span data-lang-ms>"Cairkan tulang belakang anda satu persatu seperti lilin panas."</span>
+                            </td>
+                            <td class="p-4 text-[#888]">Segmental spine mobility.</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-mono text-white">Thoracic Extension</td>
+                            <td class="p-4 italic text-[#a3a3a3]">
+                                <span data-lang-en>"Proud chest to the sun."</span>
+                                <span data-lang-zh>"骄傲地将胸膛迎向阳光。"</span>
+                                <span data-lang-ms>"Buka dada anda dengan bangga ke arah matahari."</span>
+                            </td>
+                            <td class="p-4 text-[#888]">Reversal of the desk-bound hunch.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        <div id="tab-unwind" class="tab-content space-y-12">
+            <div class="mb-8 border-b border-[#222] pb-6">
+                <span class="protocol-id text-xs text-[#3b82f6] tracking-[0.2em] uppercase block mb-1">Execution Script: KIN-013</span>
+                <h2 class="text-3xl font-serif text-white" data-lang-en>The Unwind Protocol</h2>
+                <h2 class="text-3xl font-serif text-white" data-lang-zh>身心释压动作指导</h2>
+                <h2 class="text-3xl font-serif text-white" data-lang-ms>Skrip Protokol Decompress</h2>
+                <p class="text-[#a3a3a3] mt-2 max-w-2xl leading-relaxed" data-lang-en>Adopt the "Late-Night DJ Voice" (reduce vocal power by 30%). Run this continuous decompression block at the conclusion of every Level 1 & 2 sequence.</p>
+                <p class="text-[#a3a3a3] mt-2 max-w-2xl leading-relaxed" data-lang-zh>采用"深夜电台DJ"般的低沉音色（将说话音量降低30%）。在每一组 Level 1 或 Level 2 核心训练结束时，强制执行此项连续的深层肌肉与关节放松舒缓。</p>
+                <p class="text-[#a3a3a3] mt-2 max-w-2xl leading-relaxed" data-lang-ms>Gunakan "Late-Night DJ Voice" (turunkan kekuatan suara sebanyak 30%). Jalankan blok regangan berterusan ini di akhir setiap sesi Tahap 1 & 2.</p>
+            </div>
+
+            <div class="space-y-4">
+
+                <div class="p-6 bg-subtle border border-subtle rounded-sm">
+                    <div class="flex items-start gap-4 mb-4">
+                        <span class="protocol-id text-[#4CAF50] text-xs font-bold shrink-0 mt-1">01</span>
+                        <div>
+                            <h4 class="text-lg font-serif text-white">The Barber Pole</h4>
+                            <p class="text-xs text-[#555] font-mono mt-0.5">Focus: Thoracic spine rotation / Pelvic anchorage</p>
+                        </div>
+                    </div>
+                    <div data-lang-en>
+                        <p class="text-sm italic text-[#a3a3a3]">"Keep your hip anchors locked flat. Twist your upper spine upward like a spiral staircase."</p>
+                    </div>
+                    <div data-lang-zh>
+                        <p class="text-sm italic text-[#a3a3a3]">"牢牢锁住骨盆之锚。向上旋转胸椎，身体像无限向上延伸的螺旋楼梯一般转开。"</p>
+                    </div>
+                    <div data-lang-ms>
+                        <p class="text-sm italic text-[#a3a3a3]">"Kekalkan sauh pinggul dikunci rata. Putar bahagian atas tulang belakang anda ke atas seperti tangga berpusing."</p>
+                    </div>
+                </div>
+
+                <div class="p-6 bg-subtle border border-subtle rounded-sm">
+                    <div class="flex items-start gap-4 mb-4">
+                        <span class="protocol-id text-[#4CAF50] text-xs font-bold shrink-0 mt-1">02</span>
+                        <div>
+                            <h4 class="text-lg font-serif text-white">Climbing the Trunk</h4>
+                            <p class="text-xs text-[#555] font-mono mt-0.5">Focus: Hamstring release / Spinal fluid movement</p>
+                        </div>
+                    </div>
+                    <div data-lang-en>
+                        <p class="text-sm italic text-[#a3a3a3]">"Walk your fingers slowly up your leg like climbing a tree trunk. Reach up, grow tall."</p>
+                    </div>
+                    <div data-lang-zh>
+                        <p class="text-sm italic text-[#a3a3a3]">"双手手指顺着你的小腿慢慢向上攀爬，如同爬树一样。双手触碰最高处，无限拉高脊椎。"</p>
+                    </div>
+                    <div data-lang-ms>
+                        <p class="text-sm italic text-[#a3a3a3]">"Gerakkan jari anda perlahan-lahan ke atas kaki seperti memanjat batang pokok. Capai ke atas, memanjang tinggi."</p>
+                    </div>
+                </div>
+
+                <div class="p-6 bg-subtle border border-subtle rounded-sm">
+                    <div class="flex items-start gap-4 mb-4">
+                        <span class="protocol-id text-[#4CAF50] text-xs font-bold shrink-0 mt-1">03</span>
+                        <div>
+                            <h4 class="text-lg font-serif text-white">The Arrowhead</h4>
+                            <p class="text-xs text-[#555] font-mono mt-0.5">Focus: Rhomboid activation / Cervical centering</p>
+                        </div>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="cue-block wolf">
+                            <p class="protocol-id text-[9px] text-[#3b82f6] uppercase tracking-widest mb-1">Wolf Cue</p>
+                            <p class="text-sm text-[#a3a3a3]" data-lang-en>"Engage the rhomboids, depress the scapula. Keep the cervical spine neutral."</p>
+                            <p class="text-sm text-[#a3a3a3]" data-lang-zh>"Engage the rhomboids, depress the scapula. Keep the cervical spine neutral."</p>
+                            <p class="text-sm text-[#a3a3a3]" data-lang-ms>"Engage the rhomboids, depress the scapula. Keep the cervical spine neutral."</p>
+                        </div>
+                        <div class="cue-block shepherd">
+                            <p class="protocol-id text-[9px] text-[#4CAF50] uppercase tracking-widest mb-1">Shepherd Cue</p>
+                            <div data-lang-en><p class="text-sm italic text-[#a3a3a3]">"Shoot the crown of your head through the wall in front of you. Grow two inches taller right now."</p></div>
+                            <div data-lang-zh><p class="text-sm italic text-[#a3a3a3]">"Shoot the crown of your head through the wall in front of you. Grow two inches taller right now."</p></div>
+                            <div data-lang-ms><p class="text-sm italic text-[#a3a3a3]">"Shoot the crown of your head through the wall in front of you. Grow two inches taller right now."</p></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-6 bg-subtle border border-subtle rounded-sm">
+                    <div class="flex items-start gap-4 mb-4">
+                        <span class="protocol-id text-[#4CAF50] text-xs font-bold shrink-0 mt-1">04</span>
+                        <div>
+                            <h4 class="text-lg font-serif text-white">Thread The Needle</h4>
+                            <p class="text-xs text-[#555] font-mono mt-0.5">Focus: Thoracic rotation / Oblique core drive</p>
+                        </div>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="cue-block wolf">
+                            <p class="protocol-id text-[9px] text-[#3b82f6] uppercase tracking-widest mb-1">Wolf Cue</p>
+                            <p class="text-sm text-[#a3a3a3]" data-lang-en>"Keep your pelvis square to the floor. Rotate strictly from the thoracic spine."</p>
+                            <p class="text-sm text-[#a3a3a3]" data-lang-zh>"Keep your pelvis square to the floor. Rotate strictly from the thoracic spine."</p>
+                            <p class="text-sm text-[#a3a3a3]" data-lang-ms>"Keep your pelvis square to the floor. Rotate strictly from the thoracic spine."</p>
+                        </div>
+                        <div class="cue-block shepherd">
+                            <p class="protocol-id text-[9px] text-[#4CAF50] uppercase tracking-widest mb-1">Shepherd Cue</p>
+                            <div data-lang-en><p class="text-sm italic text-[#a3a3a3]">"Sweep your arm completely under your body. Wring out your lungs like a wet towel and make space for deeper oxygen."</p></div>
+                            <div data-lang-zh><p class="text-sm italic text-[#a3a3a3]">"Sweep your arm completely under your body. Wring out your lungs like a wet towel and make space for deeper oxygen."</p></div>
+                            <div data-lang-ms><p class="text-sm italic text-[#a3a3a3]">"Sweep your arm completely under your body. Wring out your lungs like a wet towel and make space for deeper oxygen."</p></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-6 bg-subtle border border-subtle rounded-sm">
+                    <div class="flex items-start gap-4 mb-4">
+                        <span class="protocol-id text-[#4CAF50] text-xs font-bold shrink-0 mt-1">05</span>
+                        <div>
+                            <h4 class="text-lg font-serif text-white">The Windmill</h4>
+                            <p class="text-xs text-[#555] font-mono mt-0.5">Focus: Glenohumeral stability / Quadratus Lumborum release</p>
+                        </div>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="cue-block wolf">
+                            <p class="protocol-id text-[9px] text-[#3b82f6] uppercase tracking-widest mb-1">Wolf Cue</p>
+                            <p class="text-sm text-[#a3a3a3]" data-lang-en>"Keep your shoulders out of your ears. Active reach, but keep the glenohumeral joint packed."</p>
+                            <p class="text-sm text-[#a3a3a3]" data-lang-zh>"Keep your shoulders out of your ears. Active reach, but keep the glenohumeral joint packed."</p>
+                            <p class="text-sm text-[#a3a3a3]" data-lang-ms>"Keep your shoulders out of your ears. Active reach, but keep the glenohumeral joint packed."</p>
+                        </div>
+                        <div class="cue-block shepherd">
+                            <p class="protocol-id text-[9px] text-[#4CAF50] uppercase tracking-widest mb-1">Shepherd Cue</p>
+                            <div data-lang-en><p class="text-sm italic text-[#a3a3a3]">"Press one arm actively forward through the bar, and reach the other to the back of the room. Feel yourself being pulled safely in two directions. Decompress."</p></div>
+                            <div data-lang-zh><p class="text-sm italic text-[#a3a3a3]">"Press one arm actively forward through the bar, and reach the other to the back of the room. Feel yourself being pulled safely in two directions. Decompress."</p></div>
+                            <div data-lang-ms><p class="text-sm italic text-[#a3a3a3]">"Press one arm actively forward through the bar, and reach the other to the back of the room. Feel yourself being pulled safely in two directions. Decompress."</p></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-6 border border-[#3b82f6]/30 bg-[#050505] rounded-sm">
+                    <div class="flex items-start gap-4 mb-4">
+                        <span class="protocol-id text-[#3b82f6] text-xs font-bold shrink-0 mt-1">06</span>
+                        <div>
+                            <h4 class="text-lg font-serif text-white">Pearls Off The Mat</h4>
+                            <p class="text-xs text-[#555] font-mono mt-0.5">Focus: Segmental spinal articulation / Deep anterior core / Full decompression</p>
+                        </div>
+                        <span class="ml-auto protocol-id text-[9px] text-[#3b82f6] border border-[#3b82f6]/30 px-2 py-1 rounded-sm uppercase tracking-widest shrink-0">FINISHER</span>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="cue-block wolf">
+                            <p class="protocol-id text-[9px] text-[#3b82f6] uppercase tracking-widest mb-1">Wolf Cue</p>
+                            <p class="text-sm text-[#a3a3a3]" data-lang-en>"Segmental articulation. Do not hinge from the lower back. Use the deep anterior core to initiate the lift."</p>
+                            <p class="text-sm text-[#a3a3a3]" data-lang-zh>"Segmental articulation. Do not hinge from the lower back. Use the deep anterior core to initiate the lift."</p>
+                            <p class="text-sm text-[#a3a3a3]" data-lang-ms>"Segmental articulation. Do not hinge from the lower back. Use the deep anterior core to initiate the lift."</p>
+                        </div>
+                        <div class="cue-block shepherd">
+                            <p class="protocol-id text-[9px] text-[#4CAF50] uppercase tracking-widest mb-1">Shepherd Cue</p>
+                            <div data-lang-en><p class="text-sm italic text-[#a3a3a3]">"Finally, lift your spine off the mat one single vertebra at a time, like picking up a string of heavy pearls. Total gravity-assisted traction. Melt it away into the floor."</p></div>
+                            <div data-lang-zh><p class="text-sm italic text-[#a3a3a3]">"Finally, lift your spine off the mat one single vertebra at a time, like picking up a string of heavy pearls. Total gravity-assisted traction. Melt it away into the floor."</p></div>
+                            <div data-lang-ms><p class="text-sm italic text-[#a3a3a3]">"Finally, lift your spine off the mat one single vertebra at a time, like picking up a string of heavy pearls. Total gravity-assisted traction. Melt it away into the floor."</p></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+       <!-- TAB 4: THE ACADEMY (NOW INCLUDES PLAIN LANGUAGE TAXONOMY & FAQs) -->
+    <div id="tab-academy" class="tab-content space-y-12">
+        <div class="mb-8 border-b border-[#222] pb-6">
+            <span class="protocol-id text-xs text-[#888] tracking-[0.2em] uppercase block mb-1">System Documentation</span>
+            <h2 class="text-3xl font-serif text-white">The Academy & System FAQ</h2>
+            <p class="text-[#a3a3a3] mt-2 max-w-2xl leading-relaxed">Core system methodology, class taxonomy mapping, and situational protocols.</p>
+        </div>
+
+        <div class="space-y-4">
+            <!-- Plain Language Taxonomy -->
+            <details class="group bg-[#111] border border-[#222] p-5 rounded-sm" open>
+                <summary class="cursor-pointer font-serif text-xl text-white flex justify-between items-center list-none">
+                    Client-Facing Class Explanations (Taxonomy)
+                    <svg class="w-4 h-4 transition group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 9l-7 7-7-7"></path></svg>
+                </summary>
+                <div class="mt-6 space-y-6">
+                    <div class="border-l-2 border-[#888] pl-4">
+                        <h4 class="text-white font-semibold text-md mb-1">1. Optimum Control (Level 1)</h4>
+                        <p class="text-sm text-[#a3a3a3] italic mb-2">"What is this class?"</p>
+                        <p class="text-sm text-[#e0e0e0]"><strong>Plain English:</strong> "This is our foundation. It's on the Mat, Chair, or basic Reformer. It’s about slowing down, finding your neutral pelvis, and connecting with your deep core. It's perfect if you're new, recovering, or want to perfect your form before adding heavy resistance."</p>
+                    </div>
+                    <div class="border-l-2 border-[#3b82f6] pl-4">
+                        <h4 class="text-white font-semibold text-md mb-1">2. Optimum Capacity (Level 2)</h4>
+                        <p class="text-sm text-[#a3a3a3] italic mb-2">"What is this class?"</p>
+                        <p class="text-sm text-[#e0e0e0]"><strong>Plain English:</strong> "This is where we add athletic load. We use the Reformer's spring tension to build muscular endurance and functional strength. Expect to sweat and test your limits, but we keep the movements controlled and safe."</p>
+                    </div>
+                    <div class="border-l-2 border-[#ff9800] pl-4">
+                        <h4 class="text-white font-semibold text-md mb-1">3. Optimum Flow State (Level 3)</h4>
+                        <p class="text-sm text-[#a3a3a3] italic mb-2">"What is this class?"</p>
+                        <p class="text-sm text-[#e0e0e0]"><strong>Plain English:</strong> "This is kinetic harmony. We link complex movements together continuously with very few breaks. It's an advanced class focused on rhythm, efficiency, and total body integration."</p>
+                    </div>
+                </div>
+            </details>
+
+            <!-- FAQ: Privacy / Black Swan -->
+            <details class="group bg-[#0a0a0a] border border-[#222] p-5 rounded-sm">
+                <summary class="cursor-pointer font-medium text-white flex justify-between items-center list-none">
+                    Protocol: Handling Privacy Complaints (The Glass Room)
+                    <svg class="w-4 h-4 transition group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 9l-7 7-7-7"></path></svg>
+                </summary>
+                <p class="mt-4 text-sm text-[#888] leading-relaxed">
+                    If a client expresses discomfort with the see-through glass panels, do not apologize or promise frosted glass. We operate in transparency.<br><br>
+                    <strong class="text-[#e0e0e0]">The Script:</strong> "I totally understand! We keep the glass clear because the work you are doing in here is the gold standard, and we want people to see it. But your comfort is priority one. I’m going to put you right here in Lane X—it's our stealth spot where you have total privacy from the window. You're safe with me."
+                </p>
+            </details>
+        </div>
+    </div>
+</main>
+
+<script>
+    function setLang(lang) {
+        document.body.classList.remove('lang-en', 'lang-zh', 'lang-ms');
+        document.body.classList.add('lang-' + lang);
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.classList.remove('text-white', 'border-white');
+            btn.classList.add('text-[#888]', 'border-transparent');
+        });
+        const activeBtn = document.getElementById('btn-' + lang);
+        if (activeBtn) {
+            activeBtn.classList.remove('text-[#888]', 'border-transparent');
+            activeBtn.classList.add('text-white', 'border-white');
+        }
+    }
+    
+    function switchTab(tabId) {
+        document.querySelectorAll(".tab-content").forEach(tab => tab.classList.remove("active"));
+        document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
+        const activeTab = document.getElementById("tab-" + tabId);
+        if (activeTab) activeTab.classList.add("active");
+        const activeBtn = document.getElementById("tab-btn-" + tabId);
+        if (activeBtn) activeBtn.classList.add("active");
+    }
+
+    function toggleFlipboard(button) {
+        const content = button.nextElementSibling;
+        const icon = button.querySelector('svg');
+        if (content.style.maxHeight) {
+            content.style.maxHeight = null;
+            content.classList.remove('expanded');
+            if(icon) icon.style.transform = 'rotate(0deg)';
+        } else {
+            content.style.maxHeight = content.scrollHeight + "px";
+            content.classList.add('expanded');
+            if(icon) icon.style.transform = 'rotate(180deg)';
+        }
+    }
+    
+    window.onload = function() { setLang('en'); };
+</script>
+</body>
+</html>
